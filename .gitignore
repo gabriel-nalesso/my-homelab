@@ -1,0 +1,16 @@
+# Docker
+.env
+*.db
+*.log
+
+# Mysterium & Wallet
+identity.json
+private_key.pem
+*.wallet
+
+# OS específicos
+.DS_Store
+Thumbs.db
+
+# Tailscale / Chaves
+authkey.txt
