@@ -3,7 +3,6 @@ services:
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
-    # Configurações de rede que resolvem o erro de interface que você teve
     network_mode: "host" 
     restart: unless-stopped
 
@@ -18,3 +17,20 @@ services:
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
+
+  tailscale:
+    container_name: tailscale
+    image: tailscale/tailscale:latest
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./tailscale-data:/var/lib/tailscale
+    environment:
+      - TS_AUTHKEY=${TAILSCALE_AUTH_KEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_EXTRA_ARGS=--advertise-exit-node
+    restart: unless-stopped
