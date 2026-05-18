@@ -1,16 +1,19 @@
-# Docker
+# Environment & Secrets
 .env
-*.db
-*.log
-
-# Mysterium & Wallet
+authkey.txt
+*.pem
 identity.json
-private_key.pem
 *.wallet
 
-# OS específicos
+# Docker & Persistent Service Data
+tailscale-data/
+etc-pihole/
+etc-dnsmasq.d/
+
+# Logs and Databases
+*.log
+*.db
+
+# Operating System Files
 .DS_Store
 Thumbs.db
-
-# Tailscale / Chaves
-authkey.txt

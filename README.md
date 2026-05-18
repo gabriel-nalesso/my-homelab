@@ -20,7 +20,7 @@ The node is a repurposed laptop from 2013, selected for its high efficiency and 
 ## Tech Stack & Services
 * **Pi-hole**: Network-wide DNS sinkhole for ad and tracker blocking.
 * **Netdata Cloud**: High-resolution monitoring and ML-based anomaly detection.
-* **Tailscale**: Zero-config mesh VPN for secure remote SSH access.
+* **Tailscale**: Zero-config mesh VPN for secure remote SSH access and persistent Exit Node, allowing secured and tunelled external navigation.
 * **Mysterium Network**: Decentralized VPN node deployment for passive resource monetization.
 * **Docker & Docker Compose**: Container orchestration and environment isolation.
 
@@ -70,6 +70,8 @@ This lab provides real-world experience in identifying and resolving system anom
 * **DNS Interface Configuration**: Fixed a "non-local network" query drop by reconfiguring Pi-hole's listening behavior to `Permit all origins` to accommodate Docker's bridge networking.
 * **Anomaly Correlation**: Correlated system read spikes (>1,000KiB/s) with specific process restarts, such as `tc-qos-helper`, using Netdata's anomaly detection engine.
 * **DHCP IP Persistence**: Fixed an issue where router reboots caused dynamic IP shifts (e.g., from `192.168.0.8` to `192.168.0.3`). While SSH remained accessible by scanning the network, this IP churn broke hardcoded infrastructure dependencies, including Pi-hole DNS forwarding and Tailscale subnet routes. Resolved by configuring a permanent MAC-to-IP binding on the Tp-Link EX141 gateway.
+* **Tailscale Exit Node DNS Failures (SERVFAIL):** When the Tailscale container was activated in `host` network mode on Debian 13 (Trixie), raw internet traffic was successful (direct IP pings worked), but DNS resolution queries resulted in a `SERVFAIL` error in the container logs. This was resolved by forcing firewall compatibility using the `TS_DEBUG_FIREWALL_MODE=auto` parameter in `docker-compose.yml` and configuring *Global Nameservers* directly in the Tailscale Admin Console to point to the node's mesh interface IP.
+* **LAN Routing Persistence:** Enabling the exit node was isolating the local client from other devices within the same physical subnetwork. This was mitigated by executing the client with the `--exit-node-allow-lan-access` flag on the personal node (Pop!_OS) to maintain hybrid communication (Internet via Homelab + local physical network access).
 
 ---
 
